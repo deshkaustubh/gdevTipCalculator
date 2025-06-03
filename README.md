@@ -31,7 +31,6 @@ The **Tip Time App** helps users **calculate the correct tip amount** based on c
 <table>
   <tr>
     <td><img src=".README_images/tipcalcullator home.png" alt="Tip Input Screen" width="300"></td>
-    <td><img src=".README_images/tipCalculatedScreen.png" alt="Tip Calculated Screen" width="300"></td>
     <td><img src=".README_images/billAmount.png" alt="Bill Amount Screen" width="300"></td>
     <td><img src=".README_images/tipPercentage.png" alt="Tip Percentage Screen" width="300"></td>
   </tr>
