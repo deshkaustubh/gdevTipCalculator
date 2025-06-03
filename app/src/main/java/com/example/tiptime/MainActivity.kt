@@ -15,6 +15,7 @@
  */
 package com.example.tiptime
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -55,9 +56,22 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource.Companion.SideEffect
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
+import androidx.core.view.WindowInsetsControllerCompat
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,71 +89,85 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TipTimeLayout() {
-    Column(
-        modifier = Modifier
-            .statusBarsPadding()
-            .padding(horizontal = 40.dp)
-            .safeDrawingPadding()
-            .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        // Performing state hoisting that is we introduced parameters in the EditNumberField and passed those to the textField inside it and now we transfer the remembered state from EditNumberField to the TipTimeLayout
-
-        var amountInput by remember { mutableStateOf("") }
-        val amount = amountInput.toDoubleOrNull() ?: 0.0
-        var tipInput by remember { mutableStateOf("") }
-        val tipPercent = tipInput.toDoubleOrNull() ?: 0.0
-
-        // tip switch
-        var roundUp by remember { mutableStateOf(false) }
-        val tip = calculateTip(amount, tipPercent, roundUp)
-
-        Text(
-            text = stringResource(R.string.calculate_tip),
+    SetStatusBarColor(color = MaterialTheme.colorScheme.primary, darkIcons = false) // Purple with white icons
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Tip Calculator") },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer
+                )
+            )
+        }
+    ) { innerPadding ->
+        Column(
             modifier = Modifier
-                .padding(bottom = 16.dp, top = 40.dp)
-                .align(alignment = Alignment.Start),
-            style = MaterialTheme.typography.headlineSmall
-        )
-        EditNumberField(
-            label = R.string.bill_amount,
-            value = amountInput,
-            onValueChange = { amountInput = it },
-            modifier = Modifier
-                .padding(bottom = 32.dp)
-                .fillMaxWidth(),
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Number,
-                imeAction = ImeAction.Next
-            ),
-            leadingIcon = R.drawable.money
-        )
-        EditNumberField(
-            label = R.string.how_was_the_service,
-            value = tipInput,
-            onValueChange = { tipInput = it },
-            modifier = Modifier
-                .padding(bottom = 32.dp)
-                .fillMaxWidth(),
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Number,
-                imeAction = ImeAction.Done
-            ),
-            leadingIcon = R.drawable.percent
-        )
-        RoundTheTipRow(
-            roundUp = roundUp,
-            onRoundUpChanged = { roundUp = it },
-            modifier = Modifier.padding(bottom = 32.dp)
-        )
-        Text(
-            text = stringResource(R.string.tip_amount, tip),
-            style = MaterialTheme.typography.displaySmall
-        )
-        Spacer(modifier = Modifier.height(150.dp))
+                .padding(innerPadding)
+                .statusBarsPadding()
+                .padding(horizontal = 40.dp)
+                .safeDrawingPadding()
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            // Performing state hoisting that is we introduced parameters in the EditNumberField and passed those to the textField inside it and now we transfer the remembered state from EditNumberField to the TipTimeLayout
+
+            var amountInput by remember { mutableStateOf("") }
+            val amount = amountInput.toDoubleOrNull() ?: 0.0
+            var tipInput by remember { mutableStateOf("") }
+            val tipPercent = tipInput.toDoubleOrNull() ?: 0.0
+
+            // tip switch
+            var roundUp by remember { mutableStateOf(false) }
+            val tip = calculateTip(amount, tipPercent, roundUp)
+
+            Text(
+                text = stringResource(R.string.calculate_tip),
+                modifier = Modifier
+                    .padding(bottom = 16.dp, top = 40.dp)
+                    .align(alignment = Alignment.Start),
+                style = MaterialTheme.typography.headlineSmall
+            )
+            EditNumberField(
+                label = R.string.bill_amount,
+                value = amountInput,
+                onValueChange = { amountInput = it },
+                modifier = Modifier
+                    .padding(bottom = 32.dp)
+                    .fillMaxWidth(),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Next
+                ),
+                leadingIcon = R.drawable.money
+            )
+            EditNumberField(
+                label = R.string.how_was_the_service,
+                value = tipInput,
+                onValueChange = { tipInput = it },
+                modifier = Modifier
+                    .padding(bottom = 32.dp)
+                    .fillMaxWidth(),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
+                ),
+                leadingIcon = R.drawable.percent
+            )
+            RoundTheTipRow(
+                roundUp = roundUp,
+                onRoundUpChanged = { roundUp = it },
+                modifier = Modifier.padding(bottom = 32.dp)
+            )
+            Text(
+                text = stringResource(R.string.tip_amount, tip),
+                style = MaterialTheme.typography.displaySmall
+            )
+            Spacer(modifier = Modifier.height(150.dp))
+        }
     }
 }
 
@@ -148,9 +176,9 @@ fun TipTimeLayout() {
  * according to the local currency.
  * Example would be "$10.00".
  */
-private fun calculateTip(amount: Double, tipPercent: Double = 15.0,roundUp: Boolean): String {
+private fun calculateTip(amount: Double, tipPercent: Double = 15.0, roundUp: Boolean): String {
     var tip = tipPercent / 100 * amount
-    if(roundUp) tip = kotlin.math.ceil(tip)
+    if (roundUp) tip = kotlin.math.ceil(tip)
     return NumberFormat.getCurrencyInstance().format(tip)
 }
 
@@ -171,7 +199,12 @@ fun EditNumberField(
         label = { Text(stringResource(label)) },
         singleLine = true,
         keyboardOptions = keyboardOptions,
-        leadingIcon = { Icon(painter = painterResource(id = leadingIcon), contentDescription = null)}
+        leadingIcon = {
+            Icon(
+                painter = painterResource(id = leadingIcon),
+                contentDescription = null
+            )
+        }
     )
 }
 
@@ -180,7 +213,7 @@ fun RoundTheTipRow(
     roundUp: Boolean,
     onRoundUpChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier
-){
+) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -195,6 +228,20 @@ fun RoundTheTipRow(
                 .fillMaxWidth()
                 .wrapContentWidth(Alignment.End),
         )
+    }
+}
+
+@Composable
+fun SetStatusBarColor(color: Color, darkIcons: Boolean) {
+    val view = LocalView.current
+    val context = LocalContext.current
+
+    SideEffect {
+        val window = (context as Activity).window
+        window.statusBarColor = color.toArgb()  // Requires androidx.compose.ui.graphics.toArgb
+
+        // Set status bar icon color (dark/light)
+        WindowInsetsControllerCompat(window, view).isAppearanceLightStatusBars = darkIcons
     }
 }
 
