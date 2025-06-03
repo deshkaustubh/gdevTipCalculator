@@ -1,24 +1,45 @@
-Tip Time - Solution Code
-=================================
+# 💸 Tip Time App
 
-Starter code for the [Android Basics with Compose](https://developer.android.com/courses/android-basics-compose/course): Tip Time app.
+This is a **tip calculation app** built using **Jetpack Compose**, developed as part of learning exercises in **Android Basics with Compose**.
 
+---
 
-Introduction
-------------
-The Tip Time app contains various UI elements for calculating a tip,
-teaching about user input, and State in Compose.
+## 📜 Overview
+The **Tip Time App** helps users **calculate the correct tip amount** based on custom percentage inputs. It demonstrates key principles in **Jetpack Compose UI**, **state management**, and **real-time calculations**.
 
+---
 
-Pre-requisites
---------------
-* Experience with Kotlin syntax.
-* How to create and run a project in Android Studio.
+## 🚀 Features
+- 🖩 Enter **bill amount** and **custom tip percentage**.
+- 🔘 Toggle **round-up tip** for easy calculation.
+- 🌙 Supports **light and dark mode**.
+- 🧮 **Instant tip calculation** updates in real-time.
+- 🎨 Implements **Material Design 3** theming.
 
+---
 
-Getting Started
----------------
-1. Install Android Studio, if you don't already have it.
-2. Download the sample.
-3. Import the sample into Android Studio.
-4. Build and run the sample.
+## 🛠️ Tech Stack
+- **Kotlin** 🧑‍💻
+- **Jetpack Compose** 💡
+- **State Management (`remember`, `mutableStateOf`)** ⚡
+- **Android Studio** 🏗️
+
+---
+
+## 📷 App Screenshots
+
+<table>
+  <tr>
+    <td><img src="![](.README_images/tipcalcullator home.png)" alt="Tip Input Screen" width="300"></td>
+    <td><img src=".README_images/tipCalculatedScreen.png" alt="Tip Calculated Screen" width="300"></td>
+    <td><img src="![](.README_images/billAmount.png)" alt="Tip Calculated Screen" width="300"></td>
+    <td><img src="![](.README_images/tipPercentage.png)" alt="Tip Calculated Screen" width="300"></td>
+  </tr>
+</table>
+
+---
+
+## 📦 Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/tip-time.git
